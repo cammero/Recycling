@@ -1,8 +1,10 @@
 package com.cameo;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // This program stores the number of recycling crates of each house on the street.
         // The number of crates per home is stored in an Array.
 
@@ -18,9 +20,6 @@ public class Main {
             houses[i] = numberOfRecyclingCrates;
         }
 
-        String housesString = Arrays.toString(houses);
-        System.out.println(housesString);
-
         int total = 0;
         int largestNumber = 0;
         int smallestNumber = 9999;
@@ -28,29 +27,36 @@ public class Main {
         //loops through each element of array and adds to previous total to create new total
         for (int numberOfCrates : houses) {
             total = total + numberOfCrates;
-            if (numberOfCrates > largestNumber) {   //finds home with the most crates
+            if (numberOfCrates > largestNumber) {   //finds house with the most crates
                 largestNumber = numberOfCrates;
             }
-            if (numberOfCrates < smallestNumber) {  //finds home with the least crates
+            if (numberOfCrates < smallestNumber) {  //finds house with the least crates
                 smallestNumber = numberOfCrates;
             }
         }
-            System.out.println("The total number of crates for the street is " + total);
-            System.out.println("The largest number of crates set out by any house is " + largestNumber);
-            System.out.println("The smallest number of crates set out by any house is " + smallestNumber);
 
         //Creates new array list of all homes that set out the most recycling bins.
-        ArrayList<Integer> mostRecycling = new ArrayList();
-            for (int l = 0; l < houses.length; l++){
-                if (houses[l] == largestNumber){
-                    mostRecycling.add(l);
+        ArrayList<Integer> mostRecycling = new ArrayList<Integer>();
+            for (int j = 0; j < houses.length; j++){
+                if (houses[j] == largestNumber){
+                    mostRecycling.add(j);
                 }
             }
-        if (mostRecycling.size() > 1) {
-            System.out.println("House numbers " + mostRecycling + " have the most recycling.");
+
+        //Create FileWriter to write to a file
+        FileWriter writer = new FileWriter("recycling.txt");
+        int count = 0;
+        for (Integer crates : houses){
+            writer.write("House " + count + " recycled " + crates + " crates\n");
+            count++;
         }
-        else {
-            System.out.println("House number " + mostRecycling + " has the most recycling.");
+        writer.write("\nTotal crates recycled is = " + total + "\n\n");
+        writer.write("House(s) that recycled the most \n");
+        int counter = 0;
+        for (Integer houseNumber : mostRecycling){
+            writer.write("House " + counter + ": " + largestNumber + " crates\n");
+            counter++;
+        }
+        writer.close();
         }
     }
-}
